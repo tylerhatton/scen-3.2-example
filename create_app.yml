@@ -1,0 +1,49 @@
+---
+- hosts: bigip_devices
+  vars:
+    nodes:
+    - host: "10.128.20.104"
+      port: "80"
+    - host: "10.128.20.105"
+      port: "80"
+  connection: local
+  tasks:
+
+  - name: Create Webserver Pool
+    bigip_pool:
+      server: "{{ bigip_server }}"
+      user: "{{ bigip_username }}"
+      password: "{{ bigip_password }}"
+      name: "{{ app_name }}_pool"
+      lb_method: "round-robin"
+      monitors:
+      - http
+      - tcp
+      monitor_type: and_list
+      validate_certs: False
+
+  - name: Add Webserver pool members to Webserver Pool
+    bigip_pool_member:
+      server: "{{ bigip_server }}"
+      user: "{{ bigip_username }}"
+      password: "{{ bigip_password }}"
+      pool: "{{ app_name }}_pool"
+      host: {{ item.host }}
+      port: {{ item.port }}
+      validate_certs: False
+    with_items: "{{ nodes }}"
+
+  - name: Add virtual server
+    bigip_virtual_server:
+      server: "{{ bigip_server }}"
+      user: "{{ bigip_username }}"
+      password: "{{ bigip_password }}"
+      name: "{{ app_name }}_vs"
+      destination: "{{ vip_ip }}"
+      port: "{{ vip_port }}"
+      pool: "{{ app_name }}_pool"
+      snat: Automap
+      profiles:
+        - http
+        - name: clientssl
+          context: client-side
