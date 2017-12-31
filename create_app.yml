@@ -44,7 +44,6 @@
       pool: "{{ app_name }}_pool"
       snat: Automap
       profiles:
-        - name: http
         - name: clientssl
           context: client-side
 
