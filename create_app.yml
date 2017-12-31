@@ -59,7 +59,7 @@
       port: 80
       pool: "{{ app_name }}_pool"
       snat: Automap
-      profiles:
+      all_profiles:
         - http
       irules:
         - "_sys_https_redirect"
