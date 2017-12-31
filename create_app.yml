@@ -28,8 +28,8 @@
       user: "{{ bigip_username }}"
       password: "{{ bigip_password }}"
       pool: "{{ app_name }}_pool"
-      host: {{ item.host }}
-      port: {{ item.port }}
+      host: "{{ item.host }}"
+      port: "{{ item.port }}"
       validate_certs: False
     with_items: "{{ nodes }}"
 
