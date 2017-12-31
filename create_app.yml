@@ -33,17 +33,32 @@
       validate_certs: False
     with_items: "{{ nodes }}"
 
-  - name: Add virtual server
+  - name: Add HTTPS virtual server
     bigip_virtual_server:
       server: "{{ bigip_server }}"
       user: "{{ bigip_username }}"
       password: "{{ bigip_password }}"
-      name: "{{ app_name }}_vs"
+      name: "{{ app_name }}_443_vs"
       destination: "{{ vip_ip }}"
-      port: "{{ vip_port }}"
+      port: 443
       pool: "{{ app_name }}_pool"
       snat: Automap
       profiles:
         - http
         - name: clientssl
           context: client-side
+
+  - name: Add HTTP virtual server
+    bigip_virtual_server:
+      server: "{{ bigip_server }}"
+      user: "{{ bigip_username }}"
+      password: "{{ bigip_password }}"
+      name: "{{ app_name }}_80_vs"
+      destination: "{{ vip_ip }}"
+      port: 80
+      pool: "{{ app_name }}_pool"
+      snat: Automap
+      profiles:
+        - http
+      irules:
+        - "_sys_https_redirect"
