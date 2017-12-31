@@ -57,7 +57,6 @@
       name: "{{ app_name }}_80_vs"
       destination: "{{ vip_ip }}"
       port: 80
-      pool: "{{ app_name }}_pool"
       snat: Automap
       all_profiles:
         - http
