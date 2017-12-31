@@ -61,5 +61,5 @@
       snat: Automap
       all_profiles:
         - http
-      irules:
+      all_rules:
         - "_sys_https_redirect"
