@@ -38,6 +38,7 @@
       server: "{{ bigip_server }}"
       user: "{{ bigip_username }}"
       password: "{{ bigip_password }}"
+      validate_certs: False
       name: "{{ app_name }}_443_vs"
       destination: "{{ vip_ip }}"
       port: 443
@@ -53,6 +54,7 @@
       server: "{{ bigip_server }}"
       user: "{{ bigip_username }}"
       password: "{{ bigip_password }}"
+      validate_certs: False
       name: "{{ app_name }}_80_vs"
       destination: "{{ vip_ip }}"
       port: 80
