@@ -44,10 +44,9 @@
       port: 443
       pool: "{{ app_name }}_pool"
       snat: Automap
-      # all_profiles:
-      #   - name: http
-      #   - name: clientssl
-      #     context: client-side
+      all_profiles:
+        - http
+        - clientssl
 
   - name: Add HTTP virtual server
     bigip_virtual_server:
@@ -60,7 +59,7 @@
       port: 80
       pool: "{{ app_name }}_pool"
       snat: Automap
-      # profiles:
-      #   - name: http
-      # irules:
-      #   - "_sys_https_redirect"
+      profiles:
+        - http
+      irules:
+        - "_sys_https_redirect"
