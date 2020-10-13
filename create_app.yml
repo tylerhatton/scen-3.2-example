@@ -8,37 +8,27 @@
       port: "80"
   connection: local
   tasks:
-
   - name: Create Webserver Pool
     bigip_pool:
-      server: "{{ bigip_server }}"
-      user: "{{ bigip_username }}"
-      password: "{{ bigip_password }}"
+      provider: "{{ provider }}"
       name: "{{ app_name }}_pool"
       lb_method: "round-robin"
       monitors:
       - http
       - tcp
       monitor_type: and_list
-      validate_certs: False
 
   - name: Add Webserver pool members to Webserver Pool
     bigip_pool_member:
-      server: "{{ bigip_server }}"
-      user: "{{ bigip_username }}"
-      password: "{{ bigip_password }}"
+      provider: "{{ provider }}"
       pool: "{{ app_name }}_pool"
-      host: "{{ item.host }}"
+      address: "{{ item.host }}"
       port: "{{ item.port }}"
-      validate_certs: False
     with_items: "{{ nodes }}"
 
   - name: Add HTTPS virtual server
     bigip_virtual_server:
-      server: "{{ bigip_server }}"
-      user: "{{ bigip_username }}"
-      password: "{{ bigip_password }}"
-      validate_certs: False
+      provider: "{{ provider }}"
       name: "{{ app_name }}_443_vs"
       destination: "{{ vip_ip }}"
       port: 443
@@ -50,10 +40,7 @@
 
   - name: Add HTTP virtual server
     bigip_virtual_server:
-      server: "{{ bigip_server }}"
-      user: "{{ bigip_username }}"
-      password: "{{ bigip_password }}"
-      validate_certs: False
+      provider: "{{ provider }}"
       name: "{{ app_name }}_80_vs"
       destination: "{{ vip_ip }}"
       port: 80
